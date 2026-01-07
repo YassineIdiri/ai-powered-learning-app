@@ -10,7 +10,7 @@ import {finalize} from 'rxjs/operators';
   selector: 'app-sidebar',
   standalone: true,
   imports: [CommonModule, RouterLink, RouterLinkActive],
-  templateUrl: './sidebar.html',
+  templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent {
   // Helper basique si besoin, mais RouterLinkActive fait le job
