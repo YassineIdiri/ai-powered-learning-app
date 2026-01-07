@@ -40,13 +40,11 @@ Expense Tracker isn't just another CRUD app. It is an **expense tracking SaaS** 
   <table>
     <tr>
       <td align="center" width="70%">
-        <strong>Desktop Experience</strong><br>
-        Deep dive into analytics and management.<br><br>
+        <strong>Desktop Experience</strong>
         <img src="https://github.com/user-attachments/assets/7ad7a120-1b7d-4968-baba-7bc87d6c9c98" alt="Desktop View" width="100%" />
       </td>
       <td align="center" width="30%">
-        <strong>Mobile First</strong><br>
-        Track on the go.<br><br>
+        <strong>Mobile Friendly</strong><br>
         <img src="https://github.com/user-attachments/assets/f56a4b4e-6575-421f-94fe-6afbe470cf2e" alt="Mobile View" width="100%" />
       </td>
     </tr>
@@ -132,7 +130,7 @@ This solution follows a **clean, layered architecture** ensuring separation of c
 
 <div align="center">
 
-  ### 👤 Author
+  ### Author
 
   **Yassine Idiri** *Full Stack Developer — Spring Boot & Angular*
 
