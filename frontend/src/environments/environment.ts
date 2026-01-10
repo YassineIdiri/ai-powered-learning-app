@@ -1,3 +1,3 @@
 export const environment = {
-  apiUrl: 'http://localhost:8082',
+  apiUrl: 'https://expense-tracker-l9e6.onrender.com',
 };
