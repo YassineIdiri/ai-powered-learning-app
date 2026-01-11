@@ -7,31 +7,39 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
+import java.util.Arrays;
 
 @Configuration
 public class CorsConfig {
+    @Value("${app.cors.allowed-origins}")
+    private String allowedOrigins;
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        // Origine EXACTE du front (pas "*")
-        config.setAllowedOrigins(List.of("http://localhost:4200"));
+        config.setAllowedOrigins(
+                Arrays.stream(allowedOrigins.split(","))
+                        .map(String::trim)
+                        .toList()
+        );
 
-        // Méthodes (inclut OPTIONS pour le préflight)
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(List.of(
+                "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"
+        ));
 
-        // Headers nécessaires (Authorization + Content-Type)
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        config.setAllowedHeaders(List.of(
+                "Authorization", "Content-Type"
+        ));
 
-        // Si tu veux lire des headers côté front (optionnel)
         config.setExposedHeaders(List.of("Set-Cookie"));
 
-        // ✅ OBLIGATOIRE pour cookies (refresh HttpOnly)
+        // Cookies HttpOnly (refresh token)
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config); // plus simple que /api/**
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 }
