@@ -1,4 +1,3 @@
-// auth.service.ts
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { TokenStore } from './token-store.service';
@@ -24,10 +23,8 @@ export class AuthService {
     this.tokenStore.clear();
   }
 
-  /** Logout complet: revoke refresh cookie côté backend + clear access token */
   logout(): Observable<void> {
     return this.authApi.logout().pipe(
-      // même si le backend répond 401/500, on veut quand même clear côté front
       catchError(() => of(void 0)),
       tap(() => this.tokenStore.clear())
     );

@@ -1,16 +1,15 @@
 package com.yassine.smartexpensetracker.expense;
 
-import com.yassine.smartexpensetracker.auth.AuthUser;
-import com.yassine.smartexpensetracker.expense.dto.ExpenseDtos.*;
+import com.yassine.smartexpensetracker.security.auth.AuthUser;
+import com.yassine.smartexpensetracker.expense.ExpenseDtos.*;
 import jakarta.validation.Valid;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import com.yassine.smartexpensetracker.common.PageResponse;
-import com.yassine.smartexpensetracker.expense.dto.ExpenseDtos.ExpenseResponse;
+import com.yassine.smartexpensetracker.expense.ExpenseDtos.ExpenseResponse;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package com.yassine.smartexpensetracker.expense.dto;
+package com.yassine.smartexpensetracker.expense;
 
 import jakarta.validation.constraints.*;
 

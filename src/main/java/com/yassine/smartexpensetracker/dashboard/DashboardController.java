@@ -1,6 +1,6 @@
 package com.yassine.smartexpensetracker.dashboard;
 
-import com.yassine.smartexpensetracker.auth.AuthUser;
+import com.yassine.smartexpensetracker.security.auth.AuthUser;
 import com.yassine.smartexpensetracker.common.dto.CategorySpendDto;
 import com.yassine.smartexpensetracker.common.dto.DashboardResponse;
 import com.yassine.smartexpensetracker.common.dto.MerchantSpendDto;
@@ -29,8 +29,6 @@ public class DashboardController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
             @RequestParam(defaultValue = "5") int top
     ) {
-        // Robustesse: si jamais un jour un endpoint est mal configuré en permitAll,
-        // tu évites NPE et tu renvoies une erreur claire.
         if (user == null) {
             throw new org.springframework.web.server.ResponseStatusException(
                     org.springframework.http.HttpStatus.UNAUTHORIZED,

@@ -1,4 +1,4 @@
-package com.yassine.smartexpensetracker.auth;
+package com.yassine.smartexpensetracker.security.auth;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -13,8 +13,8 @@ public class AuthCookieProps {
     public String refreshCookiePath;
 
     @Value("${app.auth.cookie-secure:false}")
-    public boolean cookieSecure; // false en dev HTTP, true en prod HTTPS
+    public boolean cookieSecure;
 
     @Value("${app.auth.cookie-samesite:Lax}")
-    public String sameSite; // Lax / None / Strict
+    public String sameSite;
 }

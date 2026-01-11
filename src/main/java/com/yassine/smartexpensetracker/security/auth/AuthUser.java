@@ -1,4 +1,4 @@
-package com.yassine.smartexpensetracker.auth;
+package com.yassine.smartexpensetracker.security.auth;
 
 import java.util.UUID;
 

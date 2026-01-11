@@ -6,7 +6,6 @@ import { AuthService } from '../services/auth.service';
 export const authGuard: CanActivateFn = () => {
   const platformId = inject(PLATFORM_ID);
 
-  // Pendant SSR, on ne bloque pas (on laisse le browser décider après)
   if (!isPlatformBrowser(platformId)) return true;
 
   const auth = inject(AuthService);

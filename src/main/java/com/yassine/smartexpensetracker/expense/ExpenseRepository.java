@@ -1,6 +1,5 @@
 package com.yassine.smartexpensetracker.expense;
 
-import com.yassine.smartexpensetracker.expense.dto.ExpenseDtos;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.domain.Page;

@@ -80,7 +80,6 @@ export class Categories implements OnInit, OnDestroy {
     if (!this.isBrowser) return;
     this.refresh();
 
-    // ✅ Normalise toujours la couleur en #RRGGBB (et majuscules) sans boucle infinie
     this.form
       .get('color')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
@@ -97,8 +96,6 @@ export class Categories implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // ---------- UI helpers ----------
-
   get filtered(): Category[] {
     const s = this.q.trim().toLowerCase();
     if (!s) return this.categories;
@@ -113,7 +110,6 @@ export class Categories implements OnInit, OnDestroy {
   }
 
   private repaint(): void {
-    // Change detection “soft” (sans setTimeout spam)
     this.cdr.markForCheck();
   }
 
@@ -228,14 +224,11 @@ export class Categories implements OnInit, OnDestroy {
     return s.toUpperCase();
   }
 
-  // Appelé par le color picker
   onColorPickerChange(v: string): void {
     this.form.get('color')?.setValue(this.normalizeHex(v), { emitEvent: true });
   }
 
-  // Appelé par le champ texte
   onColorTextInput(v: string): void {
-    // on normalise en live
     this.form.get('color')?.setValue(this.normalizeHex(v), { emitEvent: true });
   }
 
@@ -266,7 +259,6 @@ export class Categories implements OnInit, OnDestroy {
       ? this.api.update(this.editing!.id, payload)
       : this.api.create(payload);
 
-    // ✅ “béton” : on ferme sur next OU complete (si API renvoie 204 et/ou flux sans next)
     let didHandle = false;
 
     request$
@@ -311,7 +303,6 @@ export class Categories implements OnInit, OnDestroy {
     this.isDeleteOpen = false;
     this.deletingTarget = null;
     this.error = '';
-    // ✅ pareil, ne pas forcer deleting=false ici si request en cours
     this.repaint();
   }
 

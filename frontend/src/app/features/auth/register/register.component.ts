@@ -117,8 +117,6 @@ export class RegisterComponent {
       });
   }
 
-  // ---------- validators ----------
-
   private passwordsMatch(group: AbstractControl): ValidationErrors | null {
     const p = group.get('password')?.value;
     const c = group.get('confirmPassword')?.value;

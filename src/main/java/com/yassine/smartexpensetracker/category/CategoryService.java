@@ -1,6 +1,6 @@
 package com.yassine.smartexpensetracker.category;
 
-import com.yassine.smartexpensetracker.category.dto.CategoryDtos.*;
+import com.yassine.smartexpensetracker.category.CategoryDtos.*;
 import com.yassine.smartexpensetracker.user.User;
 import com.yassine.smartexpensetracker.user.UserRepository;
 import org.springframework.stereotype.Service;

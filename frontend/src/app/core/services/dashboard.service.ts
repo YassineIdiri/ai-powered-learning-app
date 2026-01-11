@@ -5,31 +5,31 @@ import { environment } from '../../../environments/environment';
 
 export type DashboardResponse = {
   summary: {
-    total: number; // BigDecimal -> number
-    count: number; // long -> number
+    total: number;
+    count: number;
   };
   topCategories: Array<{
-    categoryId: string;     // UUID -> string
+    categoryId: string;
     categoryName: string;
-    total: number;          // BigDecimal -> number
+    total: number;
   }>;
   monthlySeries: Array<{
-    month: string;          // "YYYY-MM"
-    total: number;          // BigDecimal -> number
+    month: string;
+    total: number;
   }>;
 };
 
 export type CategorySpendDto = {
-  categoryId: string;       // UUID -> string
+  categoryId: string;
   categoryName: string;
-  total: number;            // BigDecimal -> number
-  count: number;            // long -> number
+  total: number;
+  count: number;
 };
 
 export type MerchantSpendDto = {
-  merchant: string;         // coalesce(e.merchant, 'Unknown')
-  total: number;            // BigDecimal -> number
-  count: number;            // long -> number
+  merchant: string;
+  total: number;
+  count: number;
 };
 
 @Injectable({ providedIn: 'root' })

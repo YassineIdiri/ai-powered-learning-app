@@ -1,4 +1,4 @@
-package com.yassine.smartexpensetracker.auth.reset;
+package com.yassine.smartexpensetracker.security.reset;
 
 import com.yassine.smartexpensetracker.user.User;
 import com.yassine.smartexpensetracker.user.UserRepository;
@@ -41,10 +41,6 @@ public class PasswordResetService {
         this.frontendBaseUrl = frontendBaseUrl;
     }
 
-    /**
-     * IMPORTANT: toujours répondre OK même si l’email n’existe pas
-     * (anti user-enumeration).
-     */
     @Transactional
     public void forgotPassword(String emailRaw) {
         String email = emailRaw.trim().toLowerCase();
@@ -56,10 +52,8 @@ public class PasswordResetService {
 
         User user = userOpt.get();
 
-        // 1) Générer token sécurisé (random)
         String token = generateSecureToken();
 
-        // 2) Stocker un hash du token en DB
         String tokenHash = sha256Base64(token);
         PasswordResetToken prt = new PasswordResetToken();
         prt.setUser(user);
@@ -67,7 +61,6 @@ public class PasswordResetService {
         prt.setExpiresAt(Instant.now().plus(resetTtl));
         tokenRepository.save(prt);
 
-        // 3) Envoyer email avec lien vers front
         String link = frontendBaseUrl + "/reset-password?token=" + urlEncode(token);
 
         String html = """

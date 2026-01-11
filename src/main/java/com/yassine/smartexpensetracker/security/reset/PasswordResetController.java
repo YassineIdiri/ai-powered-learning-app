@@ -1,9 +1,9 @@
-package com.yassine.smartexpensetracker.auth.reset;
+package com.yassine.smartexpensetracker.security.reset;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
-import static com.yassine.smartexpensetracker.auth.reset.PasswordResetDtos.*;
+import static com.yassine.smartexpensetracker.security.reset.PasswordResetDtos.*;
 
 @RestController
 @RequestMapping("/api/auth")

@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 export type PageResponse<T> = {
-  // ton backend devrait renvoyer content, mais on normalise aussi côté component
   content?: T[];
   items?: T[];
   data?: T[];
@@ -14,7 +13,6 @@ export type PageResponse<T> = {
   totalElements?: number;
   totalPages?: number;
 
-  // parfois Spring Page renvoie number/size/totalElements/totalPages
   number?: number;
   size?: number;
 };
@@ -23,7 +21,7 @@ export type Expense = {
   id: string;
   amount: number;
   currency: string;
-  expenseDate: string; // "YYYY-MM-DD"
+  expenseDate: string;
   merchant: string;
   note?: string | null;
   categoryId: string;

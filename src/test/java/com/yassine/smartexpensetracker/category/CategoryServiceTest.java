@@ -1,6 +1,6 @@
 package com.yassine.smartexpensetracker.category;
 
-import com.yassine.smartexpensetracker.category.dto.CategoryDtos.*;
+import com.yassine.smartexpensetracker.category.CategoryDtos.*;
 import com.yassine.smartexpensetracker.user.User;
 import com.yassine.smartexpensetracker.user.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,6 @@ class CategoryServiceTest {
     void list_shouldReturnMappedResponses_sortedByRepo() {
         UUID userId = UUID.randomUUID();
 
-        // repo renvoie déjà trié par name ASC (c'est le job de la query)
         Category c1 = new Category();
         c1.setName("Food");
         c1.setColor("#ff0000");
@@ -70,14 +69,12 @@ class CategoryServiceTest {
         User user = new User();
         user.setEmail("it@test.com");
         user.setPasswordHash("x");
-        // pas besoin d'id réel ici, on vérifie juste que user est mis sur la Category
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
         ArgumentCaptor<Category> captor = ArgumentCaptor.forClass(Category.class);
 
         CategoryResponse res = categoryService.create(userId, req);
 
-        // vérifie save() avec entity remplie correctement
         verify(categoryRepository).save(captor.capture());
         Category saved = captor.getValue();
 
@@ -87,7 +84,6 @@ class CategoryServiceTest {
         assertThat(saved.getIcon()).isEqualTo("🍔");
         assertThat(saved.getBudgetLimit()).isEqualByComparingTo("100.00");
 
-        // réponse mappée (id peut être null en unit test car pas de JPA)
         assertThat(res.name()).isEqualTo("Food");
         assertThat(res.color()).isEqualTo("#ff0000");
         assertThat(res.icon()).isEqualTo("🍔");
@@ -116,7 +112,6 @@ class CategoryServiceTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Category name already exists");
 
-        // stop dès le check => pas d'appel à user repo ni save
         verify(categoryRepository).existsByUserIdAndNameIgnoreCase(userId, "Food");
         verifyNoMoreInteractions(categoryRepository);
         verifyNoInteractions(userRepository);
@@ -161,7 +156,6 @@ class CategoryServiceTest {
         when(categoryRepository.findByIdAndUserId(categoryId, userId))
                 .thenReturn(Optional.of(existing));
 
-        // name change => check conflict
         when(categoryRepository.existsByUserIdAndNameIgnoreCase(userId, "Groceries"))
                 .thenReturn(false);
 
@@ -174,7 +168,6 @@ class CategoryServiceTest {
 
         CategoryResponse res = categoryService.update(userId, categoryId, req);
 
-        // JPA: pas besoin de save() explicite, l'entité est managed -> ici on vérifie juste l'état
         assertThat(existing.getName()).isEqualTo("Groceries");
         assertThat(existing.getColor()).isEqualTo("#new");
         assertThat(existing.getIcon()).isEqualTo("🛒");
@@ -199,7 +192,6 @@ class CategoryServiceTest {
         when(categoryRepository.findByIdAndUserId(categoryId, userId))
                 .thenReturn(Optional.of(existing));
 
-        // on passe "food" => equalsIgnoreCase => pas besoin de existsBy...
         UpdateCategoryRequest req = new UpdateCategoryRequest(
                 "  food  ",
                 " #c ",

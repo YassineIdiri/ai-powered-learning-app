@@ -1,4 +1,4 @@
-package com.yassine.smartexpensetracker.auth.dto;
+package com.yassine.smartexpensetracker.security.auth.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

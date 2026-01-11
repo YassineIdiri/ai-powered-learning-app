@@ -30,7 +30,6 @@ export class CategoryService {
     return this.http.get<Category[]>(this.baseUrl);
   }
 
-  // ✅ retourne void (ou Category si ton API le renvoie)
   create(payload: CategoryCreatePayload): Observable<void> {
     return this.http.post<void>(this.baseUrl, payload);
   }

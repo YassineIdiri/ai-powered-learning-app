@@ -1,6 +1,6 @@
 package com.yassine.smartexpensetracker.user;
 
-import com.yassine.smartexpensetracker.auth.refresh.RefreshTokenService;
+import com.yassine.smartexpensetracker.security.refresh.RefreshTokenService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +30,6 @@ public class UserService {
         user.setPasswordHash(passwordEncoder.encode(newPassword));
         userRepository.save(user);
 
-        // 🔥 Invalidate all sessions
         refreshTokenService.revokeAllForUser(userId);
     }
 }

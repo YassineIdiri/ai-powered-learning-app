@@ -30,10 +30,6 @@ class DashboardServiceTest {
     @InjectMocks
     DashboardService dashboardService;
 
-    // -------------------------------------------------------------------------
-    // Helpers: impl simples des projections JPA (plus lisibles que des mocks)
-    // -------------------------------------------------------------------------
-
     private static DashboardRepository.SummaryView summaryView(BigDecimal total, long count) {
         return new DashboardRepository.SummaryView() {
             @Override public BigDecimal getTotal() { return total; }
@@ -55,10 +51,6 @@ class DashboardServiceTest {
             @Override public BigDecimal getTotal() { return total; }
         };
     }
-
-    // -------------------------------------------------------------------------
-    // 1) Mapping : repo projections -> DTOs
-    // -------------------------------------------------------------------------
 
     @Test
     void getDashboard_shouldMapRepositoryViewsToDtos() {
@@ -85,28 +77,20 @@ class DashboardServiceTest {
                         monthlySpendView("2025-12", new BigDecimal("113.45"))
                 ));
 
-        // Act
         DashboardResponse res = dashboardService.getDashboard(userId, from, to, top);
 
-        // Assert summary
         assertThat(res.summary()).isEqualTo(new SummaryDto(new BigDecimal("123.45"), 7));
 
-        // Assert top categories mapping (ordre important car query order by sum desc)
         assertThat(res.topCategories()).containsExactly(
                 new TopCategoryDto(foodId, "Food", new BigDecimal("80.00")),
                 new TopCategoryDto(rentId, "Rent", new BigDecimal("43.45"))
         );
 
-        // Assert monthly mapping
         assertThat(res.monthlySeries()).containsExactly(
                 new MonthlySpendDto("2025-11", new BigDecimal("10.00")),
                 new MonthlySpendDto("2025-12", new BigDecimal("113.45"))
         );
     }
-
-    // -------------------------------------------------------------------------
-    // 2) Contrat : le "top" doit être appliqué au Pageable envoyé au repo
-    // -------------------------------------------------------------------------
 
     @Test
     void getDashboard_shouldPassTopAsPageSizeToRepository() {
@@ -131,10 +115,6 @@ class DashboardServiceTest {
         assertThat(p.getPageNumber()).isEqualTo(0);
         assertThat(p.getPageSize()).isEqualTo(top);
     }
-
-    // -------------------------------------------------------------------------
-    // 3) Discipline : une seule requête par méthode (pas de double call)
-    // -------------------------------------------------------------------------
 
     @Test
     void getDashboard_shouldCallEachRepositoryMethodOnce() {

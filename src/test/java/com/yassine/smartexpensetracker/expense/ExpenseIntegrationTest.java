@@ -1,6 +1,6 @@
 package com.yassine.smartexpensetracker.expense;
 
-import com.yassine.smartexpensetracker.auth.JwtService;
+import com.yassine.smartexpensetracker.security.jwt.JwtService;
 import com.yassine.smartexpensetracker.category.Category;
 import com.yassine.smartexpensetracker.category.CategoryRepository;
 import com.yassine.smartexpensetracker.user.User;
@@ -44,14 +44,11 @@ class ExpenseIntegrationTest {
     private String token;
     private UUID categoryId;
 
-    // ----- Helpers  -------------------
-
     private String authHeader() {
         return "Bearer " + token;
     }
 
     private RestTestClient.ResponseSpec getSearchNoAuth() {
-        // from/to REQUIRED dans controller
         return client.get()
                 .uri(BASE + "?from=" + FROM + "&to=" + TO + "&page=0&size=10")
                 .exchange();
@@ -108,8 +105,6 @@ class ExpenseIntegrationTest {
         return e.getId();
     }
 
-    // ----- Setup --------------------------------------------------------------
-
     @BeforeEach
     void setUp() {
         expenseRepository.deleteAll();
@@ -123,7 +118,6 @@ class ExpenseIntegrationTest {
 
         userId = u.getId();
 
-        // ✅ subject=userId ; filter reload user en DB
         token = jwtService.generateToken(userId, u.getEmail(), TOKEN_TTL_SECONDS);
 
         Category c = new Category();
@@ -136,8 +130,6 @@ class ExpenseIntegrationTest {
 
         categoryId = c.getId();
     }
-
-    // ----- Tests --------------------------------------------------------------
 
     @Test
     @DisplayName("GET /api/expenses -> 401 quand pas de header Authorization")
@@ -264,7 +256,6 @@ class ExpenseIntegrationTest {
 
         var deleteSpec = deleteAuth(expenseId);
 
-        // ton controller retourne void => souvent 204
         deleteSpec.expectStatus().is2xxSuccessful();
 
         assertThat(expenseRepository.findById(expenseId)).isEmpty();

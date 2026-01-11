@@ -1,7 +1,7 @@
 package com.yassine.smartexpensetracker.category;
 
-import com.yassine.smartexpensetracker.auth.AuthUser;
-import com.yassine.smartexpensetracker.category.dto.CategoryDtos.*;
+import com.yassine.smartexpensetracker.security.auth.AuthUser;
+import com.yassine.smartexpensetracker.category.CategoryDtos.*;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

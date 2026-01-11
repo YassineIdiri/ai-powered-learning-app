@@ -1,4 +1,4 @@
-package com.yassine.smartexpensetracker.auth.reset;
+package com.yassine.smartexpensetracker.security.reset;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

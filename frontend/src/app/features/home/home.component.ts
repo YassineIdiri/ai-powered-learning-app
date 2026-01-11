@@ -33,6 +33,5 @@ import { RouterLink } from '@angular/router';
   `]
 })
 export class HomeComponent {
-  // Pas de logique complexe ici, c'est une vitrine
   constructor() {}
 }

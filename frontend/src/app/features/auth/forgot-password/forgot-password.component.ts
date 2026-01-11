@@ -55,7 +55,6 @@ export class ForgotPasswordComponent {
       .pipe(this.U.pipeRepaint())
       .subscribe({
         next: () => {
-          // IMPORTANT: on affiche toujours success même si email n’existe pas (anti enumeration)
           this.U.set(() => {
             this.success = true;
           });

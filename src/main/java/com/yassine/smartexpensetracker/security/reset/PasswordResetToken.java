@@ -1,4 +1,4 @@
-package com.yassine.smartexpensetracker.auth.reset;
+package com.yassine.smartexpensetracker.security.reset;
 
 import com.yassine.smartexpensetracker.user.User;
 import jakarta.persistence.*;
@@ -20,7 +20,6 @@ public class PasswordResetToken {
     @JoinColumn(name = "user_id")
     private User user;
 
-    // On stocke un hash, jamais le token brut
     @Column(nullable = false, unique = true, length = 128)
     private String tokenHash;
 

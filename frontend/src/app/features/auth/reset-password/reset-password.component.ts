@@ -94,7 +94,6 @@ export class ResetPasswordComponent {
             this.success = true;
           });
 
-          // Redirige vers login après un court délai
           setTimeout(() => {
             this.router.navigate(['/login'], { queryParams: { reset: 'ok' } });
           }, 800);

@@ -1,4 +1,4 @@
-package com.yassine.smartexpensetracker.auth.reset;
+package com.yassine.smartexpensetracker.security.reset;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

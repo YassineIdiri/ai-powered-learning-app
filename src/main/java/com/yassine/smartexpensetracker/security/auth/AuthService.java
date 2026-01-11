@@ -1,9 +1,10 @@
-package com.yassine.smartexpensetracker.auth;
+package com.yassine.smartexpensetracker.security.auth;
 
-import com.yassine.smartexpensetracker.auth.dto.AuthResponse;
-import com.yassine.smartexpensetracker.auth.dto.LoginRequest;
-import com.yassine.smartexpensetracker.auth.dto.RegisterRequest;
-import com.yassine.smartexpensetracker.auth.refresh.RefreshTokenService;
+import com.yassine.smartexpensetracker.security.auth.dto.AuthResponse;
+import com.yassine.smartexpensetracker.security.auth.dto.LoginRequest;
+import com.yassine.smartexpensetracker.security.auth.dto.RegisterRequest;
+import com.yassine.smartexpensetracker.security.jwt.JwtService;
+import com.yassine.smartexpensetracker.security.refresh.RefreshTokenService;
 import com.yassine.smartexpensetracker.user.User;
 import com.yassine.smartexpensetracker.user.UserRepository;
 import org.springframework.http.ResponseCookie;
@@ -20,7 +21,6 @@ import java.util.UUID;
 @Service
 public class AuthService {
 
-    // Access token court
     public static final long ACCESS_TTL_SECONDS = 15 * 60; // 15 minutes
 
     private final UserRepository userRepository;
@@ -57,10 +57,8 @@ public class AuthService {
         User u = new User();
         u.setEmail(email);
         u.setPasswordHash(passwordEncoder.encode(req.password()));
-        // u.setRole(Role.USER) si tu as
         userRepository.save(u);
 
-        // register => pas de "remember me" par défaut (à toi de décider)
         return buildAuthResult(u.getId(), u.getEmail(), false);
     }
 
@@ -68,7 +66,6 @@ public class AuthService {
     public AuthResult login(LoginRequest req) {
         String email = normalizeEmail(req.email());
 
-        // Laisse Spring Security valider (UserDetailsService + PasswordEncoder)
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, req.password())
         );
@@ -79,10 +76,6 @@ public class AuthService {
         return buildAuthResult(u.getId(), u.getEmail(), req.rememberMe());
     }
 
-    /**
-     * Refresh sans rememberMe: on conserve la politique initiale,
-     * rotation => même expiresAt que l'ancien refresh.
-     */
     @Transactional
     public AuthResult refresh(String rawRefreshToken) {
         RefreshTokenService.RotationResult rotated =
@@ -113,16 +106,13 @@ public class AuthService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        // check current password
         if (!passwordEncoder.matches(currentPassword, user.getPasswordHash())) {
             throw new IllegalArgumentException("Invalid current password");
         }
 
-        // update password
         user.setPasswordHash(passwordEncoder.encode(newPassword));
         userRepository.save(user);
 
-        // 🔥 logout everywhere: revoke all refresh tokens
         refreshTokenService.revokeAllForUser(userId);
     }
 
@@ -149,14 +139,11 @@ public class AuthService {
     // ----------------- internals -----------------
 
     private AuthResult buildAuthResult(UUID userId, String email, boolean rememberMe) {
-        // 1) access token
         String accessToken = jwtService.generateToken(userId, email, ACCESS_TTL_SECONDS);
 
-        // 2) refresh token (issue selon rememberMe)
         RefreshTokenService.IssueResult issued =
                 refreshTokenService.issue(userId, rememberMe);
 
-        // 3) cookie refresh aligné avec expiresAt DB
         ResponseCookie refreshCookie = buildRefreshCookie(
                 issued.rawRefreshToken(),
                 issued.expiresAt()

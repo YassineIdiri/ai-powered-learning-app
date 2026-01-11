@@ -1,4 +1,4 @@
-package com.yassine.smartexpensetracker.category.dto;
+package com.yassine.smartexpensetracker.category;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

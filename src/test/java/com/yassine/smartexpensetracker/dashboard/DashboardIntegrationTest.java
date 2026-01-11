@@ -1,6 +1,6 @@
 package com.yassine.smartexpensetracker.dashboard;
 
-import com.yassine.smartexpensetracker.auth.JwtService;
+import com.yassine.smartexpensetracker.security.jwt.JwtService;
 import com.yassine.smartexpensetracker.user.User;
 import com.yassine.smartexpensetracker.user.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,8 +33,6 @@ class DashboardIntegrationTest {
     private UUID userId;
     private String token;
 
-    // ----- Helpers ------------------------------------------------------------
-
     private String authHeader() {
         return "Bearer " + token;
     }
@@ -62,8 +60,6 @@ class DashboardIntegrationTest {
                 .jsonPath("$.monthlySeries").isArray();
     }
 
-    // ----- Setup --------------------------------------------------------------
-
     @BeforeEach
     void setUp() {
         userRepository.deleteAll();
@@ -76,8 +72,6 @@ class DashboardIntegrationTest {
         userId = u.getId();
         token = jwtService.generateToken(userId, u.getEmail(), TOKEN_TTL_SECONDS);
     }
-
-    // ----- Tests (Main endpoint) ---------------------------------------------
 
     @Test
     @DisplayName("GET /api/dashboard -> 401 quand pas de header Authorization")
@@ -125,11 +119,6 @@ class DashboardIntegrationTest {
         getAuth(BASE + "?from=2025-12-01&to=2025-12-31&top=abc")
                 .expectStatus().isBadRequest();
     }
-
-    // Note: top négatif -> ton controller ne valide pas (pas de @Min),
-    // donc ça dépend de ton service (peut retourner 200). Je ne force pas 400 ici.
-
-    // ----- Tests (sub endpoints) ---------------------------------------------
 
     @Test
     @DisplayName("GET /api/dashboard/categories -> 401 sans auth")

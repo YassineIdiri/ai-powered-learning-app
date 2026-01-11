@@ -1,4 +1,4 @@
-                                                                                                                                                                            import { Component, ChangeDetectorRef, Inject, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef, Inject, OnInit } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -6,7 +6,6 @@ import { PLATFORM_ID } from '@angular/core';
 import { CategorySpendDto, DashboardResponse, DashboardService, MerchantSpendDto } from '../../core/services/dashboard.service';
 import { Category, CategoryService } from '../../core/services/category.service';
 import { ui, Ui } from '../../core/utils/zoneless-ui';
-
 
 type RangePreset = 'DEFAULT' | 'MONTH' | 'YEAR' | 'CUSTOM';
 
@@ -149,7 +148,6 @@ catName(id: string, fallback: string): string {
   return this.catMetaById.get(id)?.name ?? fallback;
 }
 
-  // ---------- bootstrap ----------
   bootstrap() {
     this.ui.set(() => {
       this.loading = true;
@@ -176,7 +174,6 @@ catName(id: string, fallback: string): string {
     });
   }
 
-  // ---------- preset / range ----------
   private computeRange(): { from?: string; to?: string } {
     const today = isoToday();
     if (this.preset === 'DEFAULT') return {};
@@ -233,7 +230,6 @@ catName(id: string, fallback: string): string {
 
     this.showToast('This year');
 
-    // ✅ on laisse Angular appliquer ngModel, puis on refresh
     Promise.resolve().then(() => {
       this.applyingPreset = false;
       this.refresh();
@@ -242,7 +238,7 @@ catName(id: string, fallback: string): string {
 
 
   setCustom() {
-    if (this.applyingPreset) return; // ✅ ignore les changements auto
+    if (this.applyingPreset) return;
     this.ui.set(() => (this.preset = 'CUSTOM'));
   }
 
@@ -265,7 +261,6 @@ catName(id: string, fallback: string): string {
     this.refresh();
   }
 
-  // ---------- main refresh ----------
 refresh() {
   const seq = ++this.reqSeq;
 
@@ -277,7 +272,6 @@ refresh() {
 
   const range = this.computeRange();
 
-  // 1) Dashboard principal => c'est lui qui contrôle loading
   this.dashboardApi
     .getDashboard({ from: range.from, to: range.to, top: this.top })
     .pipe(this.ui.pipeRepaint())
@@ -291,10 +285,9 @@ refresh() {
           this.count = Number(d?.summary?.count ?? 0);
           this.buildTopVM(d);
           this.buildMonthsVM(d);
-          this.loading = false; // ✅ on stoppe le skeleton KPI ICI
+          this.loading = false;
         });
 
-        // 2) détails : on les charge à part, sans bloquer les KPI
         this.loadDetails(seq, range.from, range.to);
       },
       error: (err) => {
@@ -457,10 +450,8 @@ private loadDetails(seq: number, from?: string, to?: string) {
 
   // ---------- Donut segments ----------
 donutSegments(): Array<{ dasharray: string; dashoffset: number; color: string }> {
-  // Use 100 as full circumference (works with r=15.915 trick)
   const segs: Array<{ dasharray: string; dashoffset: number; color: string }> = [];
 
-  // Stable order (largest first looks clean)
   const items = [...this.topVM].sort((a, b) => b.pct - a.pct);
 
   let offset = 0;

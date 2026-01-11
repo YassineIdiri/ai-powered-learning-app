@@ -1,5 +1,6 @@
-package com.yassine.smartexpensetracker.auth;
+package com.yassine.smartexpensetracker.security.jwt;
 
+import com.yassine.smartexpensetracker.security.auth.AuthUser;
 import com.yassine.smartexpensetracker.user.User;
 import com.yassine.smartexpensetracker.user.UserRepository;
 import jakarta.servlet.FilterChain;
@@ -40,7 +41,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        // Pas de token -> laisse Spring Security gérer (anonymous => 401 sur endpoints protégés)
         if (header == null || !header.startsWith("Bearer ")) {
             chain.doFilter(request, response);
             return;
@@ -48,7 +48,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String token = header.substring(7);
 
-        // ✅ On catch uniquement les erreurs JWT ici
         final UUID userId;
         try {
             userId = jwtService.parseUserId(token);
@@ -70,7 +69,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
 
-        // ✅ IMPORTANT : aucun try/catch autour
         chain.doFilter(request, response);
     }
 

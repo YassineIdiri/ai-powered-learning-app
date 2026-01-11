@@ -31,10 +31,8 @@ export class LoginComponent {
     private router: Router,
     cdr: ChangeDetectorRef
   ) {
-    // ✅ zoneless helper
     this.ui = ui(cdr);
 
-    // ✅ IMPORTANT: init ici (sinon TS2729)
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
@@ -76,18 +74,16 @@ export class LoginComponent {
       .login({ email, password, rememberMe })
       .pipe(
         take(1),
-        this.ui.pipeRepaint() // ✅ repaint sur next/error/finalize (zoneless-safe)
+        this.ui.pipeRepaint()
       )
       .subscribe({
         next: (res) => {
           this.tokenStore.set(res.accessToken);
           this.router.navigateByUrl('/dashboard');
 
-          // ✅ stop spinner
           this.loading = false;
         },
         error: (err) => {
-          // ✅ stop spinner
           this.loading = false;
 
           if (err?.status === 401) {

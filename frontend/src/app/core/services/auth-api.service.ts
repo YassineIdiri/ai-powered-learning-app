@@ -34,7 +34,7 @@ export class AuthApiService {
     return this.http.post<AuthResponse>(
       `${this.baseUrl}/login`,
       payload,
-      { withCredentials: true } // ⬅️ reçoit le cookie refresh
+      { withCredentials: true }
     );
   }
 
@@ -42,7 +42,7 @@ export class AuthApiService {
     return this.http.post<AuthResponse>(
       `${this.baseUrl}/register`,
       payload,
-      { withCredentials: true } // ⬅️ reçoit le cookie refresh
+      { withCredentials: true }
     );
   }
 
@@ -50,7 +50,7 @@ export class AuthApiService {
     return this.http.post<AuthResponse>(
       `${this.baseUrl}/refresh`,
       {},
-      { withCredentials: true } // ⬅️ envoie le cookie refresh
+      { withCredentials: true }
     );
   }
 
@@ -66,7 +66,7 @@ forgotPassword(payload: ForgotPasswordPayload): Observable<OkResponse> {
   return this.http.post<OkResponse>(
     `${this.baseUrl}/forgot-password`,
     payload,
-    { withCredentials: true } // safe, pas obligatoire ici mais cohérent
+    { withCredentials: true }
   );
 }
 

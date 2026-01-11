@@ -1,4 +1,4 @@
-package com.yassine.smartexpensetracker.auth.refresh;
+package com.yassine.smartexpensetracker.security.refresh;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,13 +39,6 @@ public class RefreshTokenService {
         return new IssueResult(raw, expiresAt);
     }
 
-
-    /**
-     * Vérifie et ROTATE un refresh token brut.
-     * - Révoque l'ancien
-     * - Crée un nouveau refresh token qui expire à la MÊME date que l'ancien
-     * Retourne userId + nouveau token brut.
-     */
     @Transactional
     public RotationResult verifyAndRotate(String rawToken) {
         if (rawToken == null || rawToken.isBlank()) {
@@ -63,11 +56,9 @@ public class RefreshTokenService {
             throw new InvalidRefreshTokenException("Refresh token expired");
         }
 
-        // Révoque l'ancien
         existing.revoke();
         repo.save(existing);
 
-        // Crée un nouveau qui expire à la même date
         String newRaw = generateRawToken();
         String newHash = sha256Hex(newRaw);
 
@@ -77,7 +68,6 @@ public class RefreshTokenService {
         return new RotationResult(existing.getUserId(), newRaw, existing.getExpiresAt());
     }
 
-    /** Révoque le refresh token brut (logout). Idempotent. */
     @Transactional
     public void revoke(String rawToken) {
         if (rawToken == null || rawToken.isBlank()) return;
@@ -96,7 +86,6 @@ public class RefreshTokenService {
         return repo.revokeAllActiveByUserId(userId, Instant.now());
     }
 
-    // helpers
     private String generateRawToken() {
         byte[] bytes = new byte[32]; // 256-bit
         secureRandom.nextBytes(bytes);

@@ -1,8 +1,10 @@
-package com.yassine.smartexpensetracker.auth;
-import com.yassine.smartexpensetracker.auth.dto.ChangePasswordRequest;
+package com.yassine.smartexpensetracker.security.auth;
+import com.yassine.smartexpensetracker.security.auth.dto.AuthResponse;
+import com.yassine.smartexpensetracker.security.auth.dto.ChangePasswordRequest;
+import com.yassine.smartexpensetracker.security.auth.dto.LoginRequest;
+import com.yassine.smartexpensetracker.security.auth.dto.RegisterRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
-import com.yassine.smartexpensetracker.auth.dto.*;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -65,7 +67,6 @@ public class AuthController {
     ) {
         authService.changePassword(user.id(), req.currentPassword(), req.newPassword());
 
-        // supprime le refresh cookie sur l’appareil courant
         return ResponseEntity.noContent()
                 .header(HttpHeaders.SET_COOKIE, authService.clearRefreshCookie().toString())
                 .build();

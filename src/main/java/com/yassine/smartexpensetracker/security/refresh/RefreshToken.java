@@ -1,4 +1,4 @@
-package com.yassine.smartexpensetracker.auth.refresh;
+package com.yassine.smartexpensetracker.security.refresh;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -48,6 +48,4 @@ public class RefreshToken {
     public void revoke() {
         this.revokedAt = Instant.now();
     }
-
-    // getters
 }

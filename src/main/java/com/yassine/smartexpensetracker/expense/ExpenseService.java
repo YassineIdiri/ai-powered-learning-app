@@ -3,7 +3,7 @@ package com.yassine.smartexpensetracker.expense;
 import com.yassine.smartexpensetracker.category.Category;
 import com.yassine.smartexpensetracker.category.CategoryRepository;
 import com.yassine.smartexpensetracker.common.PageResponse;
-import com.yassine.smartexpensetracker.expense.dto.ExpenseDtos.*;
+import com.yassine.smartexpensetracker.expense.ExpenseDtos.*;
 import com.yassine.smartexpensetracker.user.User;
 import com.yassine.smartexpensetracker.user.UserRepository;
 import org.springframework.data.domain.Page;

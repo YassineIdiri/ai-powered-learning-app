@@ -1,4 +1,4 @@
-package com.yassine.smartexpensetracker.auth;
+package com.yassine.smartexpensetracker.security.jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -24,7 +24,6 @@ public class JwtService {
         this.key = Keys.hmacShaKeyFor(bytes);
     }
 
-    /** TTL explicite (seconds) */
     public String generateToken(UUID userId, String email, long ttlSeconds) {
         Instant now = Instant.now();
         Instant exp = now.plusSeconds(ttlSeconds);

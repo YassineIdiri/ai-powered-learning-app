@@ -1,6 +1,6 @@
 package com.yassine.smartexpensetracker.category;
 
-import com.yassine.smartexpensetracker.auth.JwtService;
+import com.yassine.smartexpensetracker.security.jwt.JwtService;
 import com.yassine.smartexpensetracker.user.User;
 import com.yassine.smartexpensetracker.user.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,8 +35,6 @@ class CategoryIntegrationTest {
     private UUID userId;
     private String token;
     private UUID categoryId;
-
-    // ----- Helpers ------------------------------------------------------------
 
     private String authHeader() {
         return "Bearer " + token;
@@ -80,8 +78,6 @@ class CategoryIntegrationTest {
                 .exchange();
     }
 
-    // ----- Setup --------------------------------------------------------------
-
     @BeforeEach
     void setUp() {
         categoryRepository.deleteAll();
@@ -105,8 +101,6 @@ class CategoryIntegrationTest {
 
         categoryId = c.getId();
     }
-
-    // ----- Tests --------------------------------------------------------------
 
     @Test
     @DisplayName("GET /api/categories -> 401 quand pas de header Authorization")
@@ -132,7 +126,6 @@ class CategoryIntegrationTest {
         spec.expectStatus().isOk();
         spec.expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON);
 
-        // RestTestClient: pas de isArray(), on check via length()
         spec.expectBody()
                 .jsonPath("$").exists()
                 .jsonPath("$.length()").isEqualTo(1)

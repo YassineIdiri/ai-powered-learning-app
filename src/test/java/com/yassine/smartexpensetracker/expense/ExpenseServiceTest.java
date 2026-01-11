@@ -3,8 +3,7 @@ package com.yassine.smartexpensetracker.expense;
 import com.yassine.smartexpensetracker.category.Category;
 import com.yassine.smartexpensetracker.category.CategoryRepository;
 import com.yassine.smartexpensetracker.common.PageResponse;
-import com.yassine.smartexpensetracker.expense.dto.ExpenseDtos;
-import com.yassine.smartexpensetracker.expense.dto.ExpenseDtos.*;
+import com.yassine.smartexpensetracker.expense.ExpenseDtos.*;
 import com.yassine.smartexpensetracker.user.User;
 import com.yassine.smartexpensetracker.user.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -29,10 +28,6 @@ class ExpenseServiceTest {
     @Mock UserRepository userRepository;
 
     @InjectMocks ExpenseService expenseService;
-
-    // -------------------------------------------------------------------------
-    // Helpers
-    // -------------------------------------------------------------------------
 
     private static User user(UUID id, String email) {
         User u = new User();
@@ -61,10 +56,6 @@ class ExpenseServiceTest {
         e.setNote("note");
         return e;
     }
-
-    // -------------------------------------------------------------------------
-    // list()
-    // -------------------------------------------------------------------------
 
     @Test
     void list_shouldFetchBetweenDates_andMapToResponses() {
@@ -97,10 +88,6 @@ class ExpenseServiceTest {
         verify(expenseRepository).findByUserIdAndExpenseDateBetweenOrderByExpenseDateDesc(userId, from, to);
         verifyNoMoreInteractions(expenseRepository, categoryRepository, userRepository);
     }
-
-    // -------------------------------------------------------------------------
-    // create()
-    // -------------------------------------------------------------------------
 
     @Test
     void create_shouldThrow_whenCategoryNotFoundForUser() {
@@ -173,7 +160,6 @@ class ExpenseServiceTest {
 
         ArgumentCaptor<Expense> captor = ArgumentCaptor.forClass(Expense.class);
 
-        // Simule "id généré" (normalement fait par @PrePersist, mais ici pas de JPA)
         when(expenseRepository.save(any(Expense.class))).thenAnswer(inv -> {
             Expense saved = inv.getArgument(0);
             if (saved.getId() == null) saved.setId(UUID.randomUUID());
@@ -203,10 +189,6 @@ class ExpenseServiceTest {
         verify(userRepository).findById(userId);
         verifyNoMoreInteractions(expenseRepository, categoryRepository, userRepository);
     }
-
-    // -------------------------------------------------------------------------
-    // update()
-    // -------------------------------------------------------------------------
 
     @Test
     void update_shouldThrow_whenExpenseNotFoundOrNotOwned() {
@@ -310,10 +292,6 @@ class ExpenseServiceTest {
         verifyNoMoreInteractions(expenseRepository, categoryRepository, userRepository);
     }
 
-    // -------------------------------------------------------------------------
-    // delete()
-    // -------------------------------------------------------------------------
-
     @Test
     void delete_shouldThrow_whenExpenseNotFoundOrNotOwned() {
         UUID userId = UUID.randomUUID();
@@ -346,10 +324,6 @@ class ExpenseServiceTest {
         verify(expenseRepository).delete(existing);
         verifyNoMoreInteractions(expenseRepository, categoryRepository, userRepository);
     }
-
-    // -------------------------------------------------------------------------
-    // search()
-    // -------------------------------------------------------------------------
 
     @Test
     void search_shouldBuildLikePattern_whenQProvided_andMapPageResponse() {
@@ -434,10 +408,6 @@ class ExpenseServiceTest {
         assertThat(res.items()).isEmpty();
         assertThat(res.totalItems()).isZero();
     }
-
-    // -------------------------------------------------------------------------
-    // summary()
-    // -------------------------------------------------------------------------
 
     @Test
     void summary_shouldMapProjectionToDto() {

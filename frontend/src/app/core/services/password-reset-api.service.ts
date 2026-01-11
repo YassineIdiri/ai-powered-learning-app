@@ -13,7 +13,6 @@ export class PasswordResetApiService {
   constructor(private http: HttpClient) {}
 
   forgotPassword(payload: ForgotPasswordPayload): Observable<void> {
-    // pas besoin de withCredentials ici
     return this.http.post<void>(`${this.baseUrl}/forgot-password`, payload);
   }
 

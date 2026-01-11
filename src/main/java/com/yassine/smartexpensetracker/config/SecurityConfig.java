@@ -1,5 +1,6 @@
-package com.yassine.smartexpensetracker.auth;
+package com.yassine.smartexpensetracker.config;
 
+import com.yassine.smartexpensetracker.security.jwt.JwtAuthFilter;
 import com.yassine.smartexpensetracker.user.UserRepository;
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.http.HttpServletResponse;
