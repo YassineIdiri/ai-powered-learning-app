@@ -1,20 +1,45 @@
+version: '3.8'
+
 services:
-  db:
-    image: postgres:16
-    container_name: expense_tracker_db
+  postgres:
+    image: postgres:16  # ← Version récente
+    container_name: studyapp-postgres
     environment:
-      POSTGRES_DB: expense_tracker
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: studyapp_db
+      POSTGRES_USER: studyapp
+      POSTGRES_PASSWORD: studyapp123
     ports:
-      - "5433:5432"
+      - "5432:5432"  # ← Change si tu as déjà PostgreSQL local
     volumes:
-      - pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d expense_tracker"]
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - studyapp-network
+    restart: unless-stopped
+    healthcheck:  # ← Ajouté pour robustesse
+      test: ["CMD-SHELL", "pg_isready -U studyapp -d studyapp_db"]
       interval: 5s
       timeout: 3s
-      retries: 10
+      retries: 5
+
+  pgadmin:  # ← Ajouté pour confort
+    image: dpage/pgadmin4
+    container_name: studyapp-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@studyapp.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    networks:
+      - studyapp-network
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy  # ← Attend que PostgreSQL soit prêt
 
 volumes:
-  pgdata:
+  postgres-data:
+    driver: local
+
+networks:
+  studyapp-network:
+    driver: bridge
