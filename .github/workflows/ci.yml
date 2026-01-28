@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [ "master", "main"]
+    branches: [ "master", "main" ]
 
 jobs:
   backend:
@@ -12,7 +12,7 @@ jobs:
 
     services:
       postgres:
-        images: postrgres:15
+        image: postgres:15
         env:
           POSTGRES_DB: learning_app_ci
           POSTGRES_USER: learning
@@ -20,7 +20,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd="pg_isready -U donations -d donations_ci"
+          --health-cmd="pg_isready -U learning -d learning_app_ci"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
