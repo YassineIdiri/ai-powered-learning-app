@@ -2,44 +2,44 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:16  # ← Version récente
-    container_name: studyapp-postgres
+    image: postgres:16
+    container_name: learningapp-postgres
     environment:
-      POSTGRES_DB: studyapp_db
-      POSTGRES_USER: studyapp
-      POSTGRES_PASSWORD: studyapp123
+      POSTGRES_DB: learningapp-db
+      POSTGRES_USER: learningapp
+      POSTGRES_PASSWORD: learningapp123
     ports:
-      - "5432:5432"  # ← Change si tu as déjà PostgreSQL local
+      - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
-      - studyapp-network
+      - learningapp-network
     restart: unless-stopped
-    healthcheck:  # ← Ajouté pour robustesse
-      test: ["CMD-SHELL", "pg_isready -U studyapp -d studyapp_db"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U learningapp -d learningapp_db"]
       interval: 5s
       timeout: 3s
       retries: 5
 
-  pgadmin:  # ← Ajouté pour confort
+  pgadmin:
     image: dpage/pgadmin4
-    container_name: studyapp-pgadmin
+    container_name: learningapp-pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@studyapp.com
+      PGADMIN_DEFAULT_EMAIL: admin@learningapp.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "5050:80"
     networks:
-      - studyapp-network
+      - learningapp-network
     restart: unless-stopped
     depends_on:
       postgres:
-        condition: service_healthy  # ← Attend que PostgreSQL soit prêt
+        condition: service_healthy
 
 volumes:
   postgres-data:
     driver: local
 
 networks:
-  studyapp-network:
+  learningapp-network:
     driver: bridge
